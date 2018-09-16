@@ -21,9 +21,9 @@ import (
 		return p.X
 	}
 
-	// func (p points) Yaxix() int{
-	// 	return p.Y
-	// }
+	func (p points) Yaxix() int{
+		return p.Y
+	}
 
 	func findcoordinates(a coordinates){
 		fmt.Printf("the coordinates are x=%d , y=%d",a.Xaxix(),a.Yaxix())
