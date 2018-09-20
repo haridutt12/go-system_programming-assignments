@@ -56,6 +56,28 @@ func addbetween(n *Node, m int) int {
 	return addbetween(n.Next, m)
 }
 
+func deletenode(n *Node, m int) int {
+
+	p := n.Next
+
+	if n.Value == m && n == root {
+		root = n.Next
+		return 0
+	}
+
+	if p.Value == m && p.Next == nil {
+		n.Next = nil
+		return 1
+	}
+
+	if p.Value == m {
+		n.Next = p.Next
+		return 2
+	}
+
+	return deletenode(n.Next, m)
+}
+
 var root = new(Node)
 
 func main() {
@@ -70,6 +92,8 @@ func main() {
 	addnode(root, 3)
 	addnode(root, 4)
 	addbetween(root, 6)
+	traverse(root)
+	deletenode(root, 6)
 	traverse(root)
 
 }
