@@ -7,6 +7,16 @@ import (
 	"path/filepath"
 )
 
+func excludeNames(name string, exclude string) bool {
+	if exclude == "" {
+		return false
+	}
+	if filepath.Base(name) == exclude {
+		return true
+	}
+	return false
+}
+
 func main() {
 
 	minusS := flag.Bool("s", false, "Sockets")
@@ -14,6 +24,7 @@ func main() {
 	minusSL := flag.Bool("sl", false, "Symbolic Links")
 	minusD := flag.Bool("d", false, "Directories")
 	minusF := flag.Bool("f", false, "Files")
+	minusX := flag.String("x", "", "Files")
 
 	flag.Parse()
 	flags := flag.Args()
@@ -38,6 +49,10 @@ func main() {
 		fileInfo, err := os.Stat(path)
 		if err != nil {
 			return err
+		}
+
+		if excludeNames(path, *minusX) {
+			return nil
 		}
 
 		if printAll == true {
