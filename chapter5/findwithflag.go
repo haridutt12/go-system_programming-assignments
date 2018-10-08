@@ -34,23 +34,23 @@ func excludeExtensions(name string, extension string) bool {
 
 func main() {
 
-	minusS := flag.Bool("s", false, "Sockets")
-	minusP := flag.Bool("p", false, "Pipes")
-	minusSL := flag.Bool("sl", false, "Symbolic Links")
-	minusD := flag.Bool("d", false, "Directories")
-	minusF := flag.Bool("f", false, "Files")
-	minusX := flag.String("x", "", "Files")
-	minusEXT := flag.String("ext", "", "Extensions")
+	excludeSocket := flag.Bool("s", false, "Sockets")
+	excludePipes := flag.Bool("p", false, "Pipes")
+	excludeSymLinks := flag.Bool("sl", false, "Symbolic Links")
+	excludeDirectories := flag.Bool("d", false, "Directories")
+	excludeFiles := flag.Bool("f", false, "Files")
+	excludeSpecificFile := flag.String("x", "", "Files")
+	excludeExtention := flag.String("ext", "", "Extensions")
 
 	flag.Parse()
 	flags := flag.Args()
 
 	printAll := false
-	if *minusS && *minusP && *minusSL && *minusD && *minusF {
+	if *excludeSocket && *excludePipes && *excludeSymLinks && *excludeDirectories && *excludeFiles {
 		printAll = true
 	}
 
-	if !(*minusS || *minusP || *minusSL || *minusD || *minusF) {
+	if !(*excludeSocket || *excludePipes || *excludeSymLinks || *excludeDirectories || *excludeFiles) {
 		printAll = true
 	}
 
@@ -67,11 +67,11 @@ func main() {
 			return err
 		}
 
-		if excludeNames(path, *minusX) {
+		if excludeNames(path, *excludeSpecificFile ) {
 			return nil
 		}
 
-		if excludeExtensions(path, *minusEXT) {
+		if excludeExtensions(path, *excludeExtention) {
 			return nil
 		}
 
@@ -81,33 +81,36 @@ func main() {
 		}
 
 		mode := fileInfo.Mode()
-		if mode.IsRegular() && *minusF {
+		if mode.IsRegular() && *excludeFiles {
 			fmt.Println(path)
 			return nil
 		}
 
-		if mode.IsDir() && *minusD {
+		if mode.IsDir() && *excludeDirectories {
 			fmt.Println(path)
 			return nil
 		}
 
+		// os.Lstat() function that gives you information about a file or directory and
+		// the use of the Mode() function on the return value of the os.Lstat() call in order to
+		// compare the outcome with the os.ModeSymlink constant, which is the symbolic link bit
 		fileInfo, _ = os.Lstat(path)
 		if fileInfo.Mode()&os.ModeSymlink != 0 {
-			if *minusSL {
+			if *excludeSymLinks {
 				fmt.Println(path)
 				return nil
 			}
 		}
 
 		if fileInfo.Mode()&os.ModeNamedPipe != 0 {
-			if *minusP {
+			if *excludePipes {
 				fmt.Println(path)
 				return nil
 			}
 		}
 
 		if fileInfo.Mode()&os.ModeSocket != 0 {
-			if *minusS {
+			if *excludeSocket {
 				fmt.Println(path)
 				return nil
 			}
