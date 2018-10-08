@@ -67,7 +67,7 @@ func main() {
 			return err
 		}
 
-		if excludeNames(path, *excludeSpecificFile ) {
+		if excludeNames(path, *excludeSpecificFile) {
 			return nil
 		}
 
@@ -125,4 +125,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-

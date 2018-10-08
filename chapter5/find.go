@@ -1,10 +1,9 @@
-package main 
+package main
 
 import (
-
 	"fmt"
-	"path/filepath"
 	"os"
+	"path/filepath"
 )
 
 func WalkFunction(path string, info os.FileInfo, err error) error {
