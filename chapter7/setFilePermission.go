@@ -41,7 +41,16 @@ func createbinary(binaryPermissions string) string {
 	p1 := binaryPermissions[0:3]
 	p2 := binaryPermissions[3:6]
 	p3 := binaryPermissions[6:9]
-	return tripletToBinary(p1) + tripletToBinary(p2) + tripletToBinary(p3)
+	p1 = tripletToBinary(p1)
+	p2 = tripletToBinary(p2)
+	p3 = tripletToBinary(p3)
+	p1Int, _ := strconv.ParseInt(p1, 2, 64)
+	p2Int, _ := strconv.ParseInt(p2, 2, 64)
+	p3Int, _ := strconv.ParseInt(p3, 2, 64)
+	returnValue := p1Int*100 + p2Int*10 + p3Int
+	tempReturnValue := int(returnValue)
+	returnString := "0" + strconv.Itoa(tempReturnValue)
+	return returnString
 }
 
 func main() {
