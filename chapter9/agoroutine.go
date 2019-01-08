@@ -14,9 +14,10 @@ func routine1() {
 func main() {
 
 	fmt.Println("starting main routine")
-
+	var a int
+	b, _ := fmt.Scanln(&a)
 	go routine1()
-
+	fmt.Println(b)
 	go func() {
 
 		fmt.Println("running routine 2")
