@@ -1,29 +1,49 @@
 package main
 
+import "fmt"
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 type Storage interface {
-	Put(key string, value interface{}) error
-	Get(key string) (error, interface{})
-	Delete(key string) error
+	Put(key string, value interface{})
+	Get(key string) interface{}
+	Delete(key string)
 }
 
-type Vars map[string]interface{}
+type Map map[string]interface{}
 
-
-func (v *Vars)Put(key string, val interface{}) error{
-     return map[string]interface{}(*v)[key] = val
+func (v Map) Put(key string, val interface{}) {
+	v[key] = val
 }
 
-func (v *Vars)Get(key string) (error, interface{}) {
-	ok, val := map[string]interface{}(*v)[key]
+func (v Map) Get(key string) interface{} {
+	val := v[key]
+	return val
 }
 
-func (v *Vars)Delete(key string) error {
-	map[string]interface{}(*v)[key] = nil
+func (v Map) Delete(key string) {
+	v[key] = nil
+
 }
 
 func main() {
-	
 
-	
+	m := Map{}
+	m.Put("a", 123)
+	m.Put("b", 1.234)
+
+	res := m.Get("a")
+	// check(err)
+	fmt.Println(res)
+
+	m.Delete("b")
+
+	res = m.Get("b")
+	// check(err)
+	fmt.Println(res)
 
 }
