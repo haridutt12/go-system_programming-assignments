@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"io"
 	"os"
@@ -12,27 +13,27 @@ func check(e error) {
 		panic(e)
 	}
 }
-func read(s string) int {
+func read(s string) []byte {
 
 	var r io.Reader
 	r, err := os.Open(s)
 	check(err)
 	p := make([]byte, 8)
-	n, err := r.Read(p)
-	check(err)
-	return n
+	_, _ = r.Read(p)
+
+	return p
 }
 
-// func write(s string, i []byte) {
+func write(s string, i []byte) {
 
-// 	file, err := os.OpenFile(s, os.O_RDWR, 0644)
+	file, err := os.OpenFile(s, os.O_RDWR, 0644)
 
-// 	check(err)
-// 	defer file.Close()
+	check(err)
+	defer file.Close()
 
-// 	file.WriteAt(i, 0) // Write at 0 beginning
+	file.WriteAt(i, 0) // Write at 0 beginning
 
-// }
+}
 
 func main() {
 
@@ -42,10 +43,9 @@ func main() {
 	switch cloud {
 	case 1:
 		key := read("aws.txt")
-		// data := binary.BigEndian.Uint64(key)
-		// fmt.Println("key for aws :", data+1)
-		fmt.Println("key for aws :", key)
-		// write("aws.txt", key)
+		data := int32(binary.BigEndian.Uint32(key))
+		fmt.Println("key for aws :", data)
+		write("aws.txt", key)
 
 	case 2:
 
