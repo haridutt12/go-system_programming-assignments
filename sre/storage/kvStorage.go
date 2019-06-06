@@ -1,13 +1,12 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 )
 
 type Storage interface {
 	Put(key string, value interface{})
-	Get(key string) (interface{}, error)
+	Get(key string) (interface{}, string)
 	Delete(key string)
 }
 
@@ -17,13 +16,13 @@ func (v Map) Put(key string, val interface{}) {
 	v[key] = val
 }
 
-func (v Map) Get(key string) (interface{}, error) {
+func (v Map) Get(key string) (interface{}, string) {
 	val := v[key]
 	val, ok := v[key]
 	if !ok {
-		return nil, errors.New("value not found in the map")
+		return nil, "NULL"
 	}
-	return val, nil
+	return val, "NULL"
 }
 
 func (v Map) Delete(key string) {

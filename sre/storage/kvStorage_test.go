@@ -19,8 +19,8 @@ func TestPutandGet(t *testing.T) {
 	}
 	for _, table := range tables {
 		m.Put(table.x, table.y)
-		val, _ := m.Get(table.x)
-		// assert.EqualError(t, err, nil)
+		val, err := m.Get(table.x)
+		assert.Equal(t, err, "NULL")
 		assert.Equal(t, val, table.y)
 	}
 
@@ -38,8 +38,8 @@ func TestDelete(t *testing.T) {
 	for _, table := range tables {
 		m.Put(table.x, table.y)
 		m.Delete(table.x)
-		val, _ := m.Get(table.x)
-		// assert.EqualErrorf(assert.TestingT, err, "value not found in the map")
+		val, err := m.Get(table.x)
+		assert.Equal(t, err, "NULL")
 		assert.Nil(t, val)
 	}
 
