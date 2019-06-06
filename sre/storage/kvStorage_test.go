@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPutandGet(t *testing.T) {
+func TestStorer(t *testing.T) {
 
 	m := Map{}
 	tables := []struct {
@@ -17,30 +17,46 @@ func TestPutandGet(t *testing.T) {
 		{"b", 2.0},
 		{"c", "harry"},
 	}
-	for _, table := range tables {
-		m.Put(table.x, table.y)
-		val, err := m.Get(table.x)
-		assert.Equal(t, err, "NULL")
-		assert.Equal(t, val, table.y)
-	}
 
-}
-func TestDelete(t *testing.T) {
-	m := Map{}
-	tables := []struct {
-		x string
-		y interface{}
-	}{
-		{"a", 1},
-		{"b", 2.0},
-		{"c", "harry"},
-	}
-	for _, table := range tables {
-		m.Put(table.x, table.y)
-		m.Delete(table.x)
-		val, err := m.Get(table.x)
-		assert.Equal(t, err, "NULL")
-		assert.Nil(t, val)
-	}
+	t.Run("Should insert  key value ", func(t *testing.T) {
+		for _, table := range tables {
+			m.Put(table.x, table.y)
+			val, _ := m.Get(table.x)
+			assert.Equal(t, val, table.y)
+		}
+
+	})
+
+	t.Run("Should return error for non existing key", func(t *testing.T) {
+
+		for _, table := range tables {
+			m.Put(table.x, table.y)
+			_, err := m.Get(table.x)
+			assert.Equal(t, err, "NULL")
+		}
+
+	})
+
+	t.Run("Should return an error on non-existing key", func(t *testing.T) {
+
+		for _, table := range tables {
+			m.Put(table.x, table.y)
+			m.Delete(table.x)
+			_, err := m.Get(table.x)
+			assert.Equal(t, err, "NULL")
+		}
+
+	})
+
+	t.Run("Should delete existing key", func(t *testing.T) {
+
+		for _, table := range tables {
+			m.Put(table.x, table.y)
+			m.Delete(table.x)
+			val, _ := m.Get(table.x)
+			assert.Nil(t, val)
+		}
+
+	})
 
 }
