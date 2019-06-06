@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestPutandGet(t *testing.T) {
 
@@ -15,10 +19,9 @@ func TestPutandGet(t *testing.T) {
 	}
 	for _, table := range tables {
 		m.Put(table.x, table.y)
-		val := m.Get(table.x)
-		if val != table.y {
-			t.Errorf("Fetched incorrect value for key %s , got: %d, want: %d.", table.x, val, table.y)
-		}
+		val, _ := m.Get(table.x)
+		// assert.EqualError(t, err, nil)
+		assert.Equal(t, val, table.y)
 	}
 
 }
@@ -35,10 +38,9 @@ func TestDelete(t *testing.T) {
 	for _, table := range tables {
 		m.Put(table.x, table.y)
 		m.Delete(table.x)
-		val := m.Get(table.x)
-		if val != nil {
-			t.Errorf("Fetched incorrect value for key %s , got: %d, want: %s.", table.x, val, "null")
-		}
+		val, _ := m.Get(table.x)
+		// assert.EqualErrorf(assert.TestingT, err, "value not found in the map")
+		assert.Nil(t, val)
 	}
 
 }

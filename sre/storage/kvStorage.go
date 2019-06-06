@@ -1,16 +1,13 @@
 package main
 
-import "fmt"
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+import (
+	"errors"
+	"fmt"
+)
 
 type Storage interface {
 	Put(key string, value interface{})
-	Get(key string) interface{}
+	Get(key string) (interface{}, error)
 	Delete(key string)
 }
 
@@ -20,13 +17,21 @@ func (v Map) Put(key string, val interface{}) {
 	v[key] = val
 }
 
-func (v Map) Get(key string) interface{} {
+func (v Map) Get(key string) (interface{}, error) {
 	val := v[key]
-	return val
+	val, ok := v[key]
+	if !ok {
+		return nil, errors.New("value not found in the map")
+	}
+	return val, nil
 }
 
 func (v Map) Delete(key string) {
-	v[key] = nil
+	_, ok := v[key]
+	// checks if key exists. and deletes content only if key exists. else ignores.
+	if ok {
+		delete(v, key)
+	}
 
 }
 
@@ -36,17 +41,16 @@ func main() {
 	m.Put("a", 123)
 	m.Put("b", 1.234)
 
-	res := m.Get("a")
+	res, _ := m.Get("a")
+	fmt.Println(res)
+
+	res, _ = m.Get("b")
+
+	fmt.Println(res)
 
 	m.Delete("b")
-	// fmt.Println(err)
 
-	m.Delete("a")
-	// fmt.Println(err)
-
-	res = m.Get("b")
-	//check(err)
-	// fmt.Println(err)
+	res, _ = m.Get("b")
 
 	fmt.Println(res)
 
